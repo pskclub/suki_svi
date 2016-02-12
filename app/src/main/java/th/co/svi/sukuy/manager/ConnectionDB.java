@@ -31,6 +31,7 @@ public class ConnectionDB {
                     + "databaseName=" + db + ";user=" + un + ";password="
                     + password + ";";
             conn = DriverManager.getConnection(ConnURL);
+
         } catch (SQLException se) {
             Log.e("ERRO", se.getMessage());
         } catch (ClassNotFoundException e) {

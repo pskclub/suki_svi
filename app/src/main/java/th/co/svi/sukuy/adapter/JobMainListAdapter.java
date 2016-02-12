@@ -46,9 +46,10 @@ public class JobMainListAdapter extends BaseAdapter {
             item = (JobMainListItem) view;
         } else {
             item = new JobMainListItem(viewGroup.getContext());
+            item.setText(context,Data.get(i).get("title").toString(),Data.get(i).get("link").toString());
 
         }
-        item.setText(context,Data.get(i).get("title").toString(),Data.get(i).get("link").toString());
+
         return item;
     }
 }

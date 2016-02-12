@@ -1,24 +1,18 @@
 package th.co.svi.sukuy.fragment;
 
-import android.content.Context;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
+import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ListAdapter;
-import android.widget.ListView;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.baoyz.widget.PullRefreshLayout;
 
-
-import java.net.URL;
-import java.net.URLConnection;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -30,6 +24,7 @@ import java.util.Map;
 import th.co.svi.sukuy.R;
 import th.co.svi.sukuy.adapter.JobMainListAdapter;
 import th.co.svi.sukuy.manager.ConnectionDB;
+import th.co.svi.sukuy.view.JobMainListItem;
 
 
 /**
@@ -37,6 +32,7 @@ import th.co.svi.sukuy.manager.ConnectionDB;
  */
 public class MainFragment extends Fragment {
     GridView listView;
+    TextView txtErr;
     JobMainListAdapter listAdapter;
     PullRefreshLayout layout;
     ConnectionDB connectionClass;
@@ -57,51 +53,37 @@ public class MainFragment extends Fragment {
 
 
     private void showList() {
-        if (isConnection()) {
-//        if (isConnectedToServer("12.1.2.18", 1000)) {
-            connectionClass = new ConnectionDB();
-            try {
-                Connection con = connectionClass.CONN();
-                if (con == null) {
-                    Toast.makeText(MainFragment.this.getActivity(), "Err", Toast.LENGTH_SHORT).show();
-                } else {
-                    String query = "select * from pic";
-                    Statement stmt = con.createStatement();
-                    ResultSet rs = stmt.executeQuery(query);
-                    MyArrList = new ArrayList<HashMap<String, String>>();
-                    if (rs != null && rs.next()) {
-                        do {
-                            map = new HashMap<String, String>();
-                            map.put("title", rs.getString("name_pic"));
-                            map.put("link", rs.getString("link"));
-                            MyArrList.add((HashMap<String, String>) map);
-                        } while (rs.next());
-                    }
+
+        connectionClass = new ConnectionDB();
+        try {
+            Connection con = connectionClass.CONN();
+            if (con == null) {
+                txtErr.setText("ไม่สามารถเชื่อมต่อ Server ได้");
+                txtErr.setVisibility(View.VISIBLE);
+//                Toast.makeText(getContext(), "ไม่สามารถเชื่อมต่อ Server ได้",
+//                        Toast.LENGTH_SHORT).show();
+            } else {
+                txtErr.setVisibility(View.GONE);
+                String query = "select * from pic";
+                Statement stmt = con.createStatement();
+                ResultSet rs = stmt.executeQuery(query);
+                MyArrList = new ArrayList<HashMap<String, String>>();
+                if (rs != null && rs.next()) {
+                    do {
+                        map = new HashMap<String, String>();
+                        map.put("title", rs.getString("name_pic"));
+                        map.put("link", rs.getString("link"));
+                        MyArrList.add((HashMap<String, String>) map);
+                    } while (rs.next());
+                    rs.close();
                 }
-            } catch (SQLException e) {
-                e.printStackTrace();
+                listAdapter = new JobMainListAdapter(getContext(), MyArrList);
+                listView.setAdapter(listAdapter);
             }
-            listAdapter = new JobMainListAdapter(getContext(), MyArrList);
-            listView.setAdapter(listAdapter);
-    /*    } else {
-            Toast.makeText(getContext(), "ไม่สามารถเชื่อมต่อ Server ได้",
-                    Toast.LENGTH_SHORT).show();
-        }*/
+        } catch (SQLException e) {
+            txtErr.setText("ไม่สามารถเชื่อมต่อ Server ได้");
+            txtErr.setVisibility(View.VISIBLE);
         }
-    }
-
-    public boolean isConnection() {
-        ConnectivityManager connManager = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo mWifi = connManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
-
-        if (mWifi != null && mWifi.isConnected()) {
-            Toast.makeText(getContext(), "เชื่อมต่อ Server ได้",
-                    Toast.LENGTH_SHORT).show();
-            return true;
-        }
-        Toast.makeText(getContext(), "ไม่สามารถเชื่อมต่อ Server ได้",
-                Toast.LENGTH_SHORT).show();
-        return false;
     }
 
 
@@ -110,6 +92,29 @@ public class MainFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         initInstances(rootView);
         showList();
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                JobMainListItem item;
+                if (view != null) {
+                    item = (JobMainListItem) view;
+                } else {
+                    item = new JobMainListItem(getContext());
+
+                }
+                item.setText(getContext(),"ภาสกร (หลง)","https://fbcdn-sphotos-b-a.akamaihd.net/hphotos-ak-xfa1/v/t1.0-9/10153907_875848735773154_5418882709047636551_n.jpg?oh=88a0c558b957e9e70ff0d9c0af5680ed&oe=572DB7DF&__gda__=1463091945_f68b9e654ed9119519eedc3a8565fc54");
+                AlertDialog.Builder builder;
+                builder = new AlertDialog.Builder(getActivity(), R.style.AppCompatAlertDialogStyle);
+                builder.setTitle("แจ้งเตือน");
+                builder.setMessage(MyArrList.get(i).get("title").toString()+" ถูกเปลี่ยนเป็น ภาสกร (หลง)");
+                builder.setPositiveButton("ตกลง", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+
+                    }
+                });//second parameter used for onclicklistener
+                builder.show();
+            }
+        });
         layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
@@ -127,6 +132,7 @@ public class MainFragment extends Fragment {
 
     private void initInstances(View rootView) {
         // init instance with rootView.findViewById here
+        txtErr = (TextView) rootView.findViewById(R.id.textErr);
         layout = (PullRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         listView = (GridView) rootView.findViewById(R.id.listView);
 
