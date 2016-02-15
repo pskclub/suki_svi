@@ -25,9 +25,8 @@ import th.co.svi.sukuy.R;
  * Created by nuuneoi on 11/16/2014.
  */
 public class JobMainListItem extends BaseCustomViewGroup {
-    private TextView txt1;
-    private TextView txt2;
-    private ImageView img;
+    private TextView txtName;
+    private TextView txtProgress;
 
     public JobMainListItem(Context context) {
         super(context);
@@ -63,16 +62,16 @@ public class JobMainListItem extends BaseCustomViewGroup {
 
     private void initInstances() {
         // findViewById here
-        txt1 = (TextView) findViewById(R.id.textView1);
-//        txt2 = (TextView) findViewById(R.id.textView2);
-        img = (ImageView) findViewById(R.id.imageView1);
+        txtName = (TextView) findViewById(R.id.txtName);
+        txtProgress = (TextView) findViewById(R.id.txtProgress);
 
     }
 
-    public void setText(Context context, String txt1, String txt2) {
-        this.txt1.setText(txt1);
-        Picasso.with(context).load(txt2).placeholder(R.drawable.ic_cached_black_48dp).resize(250, 250)
-                .centerCrop().into(img);
+    public void setText(Context context, String txtName, String txtProgress) {
+        this.txtName.setText(txtName);
+        this.txtProgress.setText(txtProgress);
+       /* Picasso.with(context).load(txt2).placeholder(R.drawable.ic_cached_black_48dp).resize(250, 250)
+                .centerCrop().into(img);*/
 //        this.txt2.setText(txt2);
     }
 

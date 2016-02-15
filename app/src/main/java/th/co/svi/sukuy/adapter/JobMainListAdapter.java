@@ -1,12 +1,9 @@
 package th.co.svi.sukuy.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -17,7 +14,7 @@ import th.co.svi.sukuy.view.JobMainListItem;
  */
 public class JobMainListAdapter extends BaseAdapter {
     Context context;
-    ArrayList<HashMap<String, String>> Data=new ArrayList<HashMap<String,String>>();
+    ArrayList<HashMap<String, String>> Data = new ArrayList<>();
 
     public JobMainListAdapter(Context context, ArrayList<HashMap<String, String>> Data) {
         this.context = context;
@@ -46,10 +43,9 @@ public class JobMainListAdapter extends BaseAdapter {
             item = (JobMainListItem) view;
         } else {
             item = new JobMainListItem(viewGroup.getContext());
-            item.setText(context,Data.get(i).get("title").toString(),Data.get(i).get("link").toString());
 
         }
-
+        item.setText(context, Data.get(i).get("name").toString(),"เหลืออีก" +Data.get(i).get("use").toString());
         return item;
     }
 }

@@ -64,15 +64,18 @@ public class MainFragment extends Fragment {
 //                        Toast.LENGTH_SHORT).show();
             } else {
                 txtErr.setVisibility(View.GONE);
-                String query = "select * from pic";
+                String query = "select * from order_product";
                 Statement stmt = con.createStatement();
                 ResultSet rs = stmt.executeQuery(query);
                 MyArrList = new ArrayList<HashMap<String, String>>();
                 if (rs != null && rs.next()) {
                     do {
                         map = new HashMap<String, String>();
-                        map.put("title", rs.getString("name_pic"));
-                        map.put("link", rs.getString("link"));
+                        map.put("id", rs.getString("id_order"));
+                        map.put("date", rs.getString("order_date"));
+                        map.put("finish", rs.getString("finishgood"));
+                        map.put("name", rs.getString("name"));
+                        map.put("use", rs.getString("usenumber"));
                         MyArrList.add((HashMap<String, String>) map);
                     } while (rs.next());
                     rs.close();
@@ -95,7 +98,7 @@ public class MainFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                JobMainListItem item;
+              /*  JobMainListItem item;
                 if (view != null) {
                     item = (JobMainListItem) view;
                 } else {
@@ -112,7 +115,7 @@ public class MainFragment extends Fragment {
 
                     }
                 });//second parameter used for onclicklistener
-                builder.show();
+                builder.show();*/
             }
         });
         layout.setOnRefreshListener(new PullRefreshLayout.OnRefreshListener() {

@@ -12,14 +12,14 @@ import th.co.svi.sukuy.R;
 /**
  * Created by nuuneoi on 11/16/2014.
  */
-public class ComplateFragment extends Fragment {
+public class SuccessFragment extends Fragment {
 
-    public ComplateFragment() {
+    public SuccessFragment() {
         super();
     }
 
-    public static ComplateFragment newInstance() {
-        ComplateFragment fragment = new ComplateFragment();
+    public static SuccessFragment newInstance() {
+        SuccessFragment fragment = new SuccessFragment();
         Bundle args = new Bundle();
         fragment.setArguments(args);
         return fragment;
@@ -28,7 +28,7 @@ public class ComplateFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_complate, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_success, container, false);
         initInstances(rootView);
         return rootView;
     }
