@@ -25,10 +25,12 @@ public class SelectDB {
             String query = "";
             Statement stmt = con.createStatement();
             rs = stmt.executeQuery(query);
+            con.close();
         } catch (SQLException e) {
             Toast.makeText(context, "DB มีปัญหา",
                     Toast.LENGTH_SHORT).show();
         }
+
         return rs;
     }
 }

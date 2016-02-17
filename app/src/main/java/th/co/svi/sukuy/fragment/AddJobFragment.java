@@ -87,6 +87,7 @@ public class AddJobFragment extends Fragment implements AdapterView.OnItemSelect
                 ResultSet rs = stmt.executeQuery(query);
                 // Spinner Drop down elements
                 List<String> categories = new ArrayList<String>();
+
                 if (rs != null && rs.next()) {
                     do {
                         categories.add(rs.getString("name_formular"));

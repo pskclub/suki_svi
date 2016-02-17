@@ -24,6 +24,7 @@ public class InsertDB {
             String query = "INSERT INTO pic (id_pic,name_pic,link) VALUES (9021,'5555','555555555')";
             Statement stmt = con.createStatement();
             rs = stmt.executeUpdate(query);
+            con.close();
         } catch (SQLException e) {
             Toast.makeText(context, "DB มีปัญหา",
                     Toast.LENGTH_SHORT).show();
