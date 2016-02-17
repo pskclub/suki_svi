@@ -33,4 +33,20 @@ public class SelectDB {
 
         return rs;
     }
+
+    public ResultSet FormularAll(Context context) {
+        ResultSet rs = null;
+        try {
+            Connection con = ConnectionClass.CONN();
+            String query = "SELECT * FROM formular_master";
+            Statement stmt = con.createStatement();
+            rs = stmt.executeQuery(query);
+            con.close();
+        } catch (SQLException e) {
+            Toast.makeText(context, "DB มีปัญหา",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        return rs;
+    }
 }
