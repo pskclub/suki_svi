@@ -12,15 +12,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import th.co.svi.sukuy.R;
-import th.co.svi.sukuy.manager.ConnectionDB;
 import th.co.svi.sukuy.manager.InsertDB;
 import th.co.svi.sukuy.manager.SelectDB;
 
@@ -30,10 +28,10 @@ import th.co.svi.sukuy.manager.SelectDB;
  */
 public class AddJobFragment extends Fragment implements AdapterView.OnItemSelectedListener {
     Spinner spinner;
-    ConnectionDB connectionClass;
-    String txtSpin;
+    int formularId;
     Button btnSubmit;
     EditText txtName;
+    HashMap<String, String> formularMap;
 
     public AddJobFragment() {
         super();
@@ -56,7 +54,7 @@ public class AddJobFragment extends Fragment implements AdapterView.OnItemSelect
             @Override
             public void onClick(View view) {
                 InsertDB insertOrder = new InsertDB();
-                int result = insertOrder.Product(getActivity(), txtName.toString(), txtSpin);
+                int result = insertOrder.Product(getActivity(), txtName.toString(), formularId);
                 if (result == 1) {
                     Toast.makeText(getActivity(), "เสร็จแล้ว", Toast.LENGTH_SHORT).show();
                     getActivity().setResult(3);
@@ -77,74 +75,67 @@ public class AddJobFragment extends Fragment implements AdapterView.OnItemSelect
     private void showList() {
 
         SelectDB formulatSel = new SelectDB();
-        ResultSet rs = formulatSel
-        String query = "select * from formular_master";
-        Statement stmt = con.createStatement();
-        ResultSet rs = stmt.executeQuery(query);
-        // Spinner Drop down elements
-        List<String> categories = new ArrayList<String>();
-
-        if (rs != null && rs.next()) {
-            do {
-                categories.add(rs.getString("name_formular"));
-            } while (rs.next());
-            rs.close();
+        ResultSet rs = formulatSel.FormularAll(getActivity());
+        List<String> formularList = new ArrayList<String>();
+        formularMap = new HashMap<String, String>();
+        try {
+            if (rs != null && rs.next()) {
+                do {
+                    formularMap.put(rs.getString("name_formular"), rs.getString("id_formular"));
+                    formularList.add(rs.getString("name_formular"));
+                } while (rs.next());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        // Creating adapter for spinner
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(), android.R.layout.simple_spinner_item, categories);
-
-        // Drop down layout style - list view with radio button
+        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(),
+                android.R.layout.simple_spinner_item, formularList);
         dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-
-        // attaching data adapter to spinner
+        spinner.setOnItemSelectedListener(this);
         spinner.setAdapter(dataAdapter);
     }
 
-}catch(SQLException e){
-        e.printStackTrace();
-        }
-        }
 
-@Override
-public void onStart(){
+    @Override
+    public void onStart() {
         super.onStart();
-        }
+    }
 
-@Override
-public void onStop(){
+    @Override
+    public void onStop() {
         super.onStop();
-        }
+    }
 
     /*
      * Save Instance State Here
      */
-@Override
-public void onSaveInstanceState(Bundle outState){
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         // Save Instance State here
-        }
+    }
 
     /*
      * Restore Instance State Here
      */
-@Override
-public void onActivityCreated(Bundle savedInstanceState){
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        if(savedInstanceState!=null){
-        // Restore Instance State here
+        if (savedInstanceState != null) {
+            // Restore Instance State here
         }
-        }
+    }
 
-@Override
-public void onItemSelected(AdapterView<?>adapterView,View view,int i,long l){
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
 
-        txtSpin=adapterView.getItemAtPosition(i).toString();
+        formularId = Integer.parseInt(formularMap.get(adapterView.getItemAtPosition(i).toString()));
 
-        }
+    }
 
-@Override
-public void onNothingSelected(AdapterView<?>adapterView){
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
 
-        }
+    }
 
-        }
+}

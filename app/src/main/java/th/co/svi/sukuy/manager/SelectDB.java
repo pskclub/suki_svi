@@ -41,7 +41,6 @@ public class SelectDB {
             String query = "SELECT * FROM formular_master";
             Statement stmt = con.createStatement();
             rs = stmt.executeQuery(query);
-            con.close();
         } catch (SQLException e) {
             Toast.makeText(context, "DB มีปัญหา",
                     Toast.LENGTH_SHORT).show();
