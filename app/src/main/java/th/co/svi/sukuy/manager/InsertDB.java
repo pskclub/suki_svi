@@ -21,7 +21,7 @@ public class InsertDB {
         int rs = 0;
         try {
             Connection con = ConnectionClass.CONN();
-            String query = "INSERT INTO order_product (name,id_formular,order_date) VALUES ('"+orderName+"',"+formularId+","+DateTime.Now+")";
+            String query = "INSERT INTO order_product (name,id_formular,order_date) VALUES ('"+orderName+"',"+formularId+",DateTime.Now)";
             Statement stmt = con.createStatement();
             rs = stmt.executeUpdate(query);
             con.close();
