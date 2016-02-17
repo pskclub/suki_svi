@@ -17,11 +17,11 @@ public class InsertDB {
         ConnectionClass = new ConnectionDB();
     }
 
-    public int Product(Context context,String orderName,String formularName) {
+    public int Product(Context context,String orderName,int formularId) {
         int rs = 0;
         try {
             Connection con = ConnectionClass.CONN();
-            String query = "INSERT INTO pic (id_pic,name_pic,link) VALUES (9021,'5555','555555555')";
+            String query = "INSERT INTO order_product (name,id_formular,order_date) VALUES ('"+orderName+"',"+formularId+",DateTime.Now)";
             Statement stmt = con.createStatement();
             rs = stmt.executeUpdate(query);
             con.close();
