@@ -1,0 +1,34 @@
+package th.co.svi.sukuy.manager;
+
+import android.content.Context;
+import android.widget.Toast;
+
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+/**
+ * Created by MIS_Student5 on 17/2/2559.
+ */
+public class SelectDB {
+    ConnectionDB ConnectionClass;
+
+    public SelectDB() {
+        ConnectionClass = new ConnectionDB();
+    }
+
+    public ResultSet ProductAll(Context context, String orderName, String formularName) {
+        ResultSet rs = null;
+        try {
+            Connection con = ConnectionClass.CONN();
+            String query = "";
+            Statement stmt = con.createStatement();
+            rs = stmt.executeQuery(query);
+        } catch (SQLException e) {
+            Toast.makeText(context, "DB มีปัญหา",
+                    Toast.LENGTH_SHORT).show();
+        }
+        return rs;
+    }
+}

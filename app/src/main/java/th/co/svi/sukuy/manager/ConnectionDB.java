@@ -3,6 +3,9 @@ package th.co.svi.sukuy.manager;
 import android.annotation.SuppressLint;
 import android.os.StrictMode;
 import android.util.Log;
+import android.widget.Toast;
+
+import com.inthecheesefactory.thecheeselibrary.manager.Contextor;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -38,6 +41,10 @@ public class ConnectionDB {
             Log.e("ERRO", e.getMessage());
         } catch (Exception e) {
             Log.e("ERRO", e.getMessage());
+        }
+        if (conn == null) {
+            Toast.makeText(Contextor.getInstance().getContext(), "ไม่สามารถเชื่อมต่อ Server ได้",
+                    Toast.LENGTH_SHORT).show();
         }
         return conn;
     }

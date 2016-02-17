@@ -21,6 +21,7 @@ import java.util.List;
 
 import th.co.svi.sukuy.R;
 import th.co.svi.sukuy.manager.ConnectionDB;
+import th.co.svi.sukuy.manager.InsertDB;
 
 
 /**
@@ -53,23 +54,11 @@ public class AddJobFragment extends Fragment implements AdapterView.OnItemSelect
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                connectionClass = new ConnectionDB();
-                try {
-                    Connection con = connectionClass.CONN();
-                    if (con == null) {
-
-                        Toast.makeText(getContext(), "ไม่สามารถเชื่อมต่อ Server ได้",
-                                Toast.LENGTH_SHORT).show();
-                    } else {
-                        String query = "INSERT INTO pic (name_pic,link) VALUES ('','')";
-                        Statement stmt = con.createStatement();
-                        stmt.executeUpdate(query);
-                        getActivity().setResult(3);
-                        getActivity().finish();
-                    }
-
-                } catch (SQLException e) {
-                    e.printStackTrace();
+                InsertDB insertOrder = new InsertDB();
+                int result = insertOrder.Product(getActivity(),txtName.toString(),txtSpin);
+                if (result == 1) {
+                    getActivity().setResult(3);
+                    getActivity().finish();
                 }
             }
         });
