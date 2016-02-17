@@ -14,6 +14,19 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="AppTheme_Add" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <!-- Customize your theme here. -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorPrimary</item>
+
+        <item name="colorControlHighlight">@color/colorPrimaryDarkMore</item>
+        <item name="android:textColorHint">@color/colorPrimary</item>
+        <item name="colorButtonNormal">@color/button</item>
+    </style>
+
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppCompatAlertDialogStyle" parent="Theme.AppCompat.Light.Dialog.Alert">

@@ -1,15 +1,21 @@
 package th.co.svi.sukuy.fragment;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 
@@ -22,6 +28,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 import th.co.svi.sukuy.R;
+import th.co.svi.sukuy.activity.AddJobActivity;
+import th.co.svi.sukuy.activity.MainActivity;
 import th.co.svi.sukuy.adapter.JobMainListAdapter;
 import th.co.svi.sukuy.manager.ConnectionDB;
 import th.co.svi.sukuy.view.JobMainListItem;
@@ -38,6 +46,8 @@ public class MainFragment extends Fragment {
     ConnectionDB connectionClass;
     ArrayList<HashMap<String, String>> MyArrList;
     Map<String, String> map;
+    FloatingActionButton fbtAdd;
+    CoordinatorLayout rootLayout;
 
 
     public MainFragment() {
@@ -75,7 +85,7 @@ public class MainFragment extends Fragment {
                         map.put("date", rs.getString("order_date"));
                         map.put("finish", rs.getString("finishgood"));
                         map.put("name", rs.getString("name"));
-                        map.put("use", rs.getString("usenumber"));
+                        map.put("use", "");
                         MyArrList.add((HashMap<String, String>) map);
                     } while (rs.next());
                     rs.close();
@@ -125,7 +135,13 @@ public class MainFragment extends Fragment {
                 layout.setRefreshing(false);
             }
         });
-
+        fbtAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(getActivity(), AddJobActivity.class);
+                startActivityForResult(i, 3);
+            }
+        });
 
         return rootView;
 
@@ -136,6 +152,8 @@ public class MainFragment extends Fragment {
     private void initInstances(View rootView) {
         // init instance with rootView.findViewById here
         txtErr = (TextView) rootView.findViewById(R.id.textErr);
+        rootLayout = (CoordinatorLayout) rootView.findViewById(R.id.rootLayout);
+        fbtAdd = (FloatingActionButton) rootView.findViewById(R.id.fabAdd);
         layout = (PullRefreshLayout) rootView.findViewById(R.id.swipeRefreshLayout);
         listView = (GridView) rootView.findViewById(R.id.listView);
 
@@ -172,5 +190,9 @@ public class MainFragment extends Fragment {
         }
     }
 
-
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 3)
+            showList();
+    }
 }
