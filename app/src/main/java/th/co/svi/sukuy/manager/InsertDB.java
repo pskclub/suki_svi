@@ -21,6 +21,7 @@ public class InsertDB {
 
     public int Product(Context context, String orderName, int formularId) {
         int rs = 0;
+        orderName = convertToUTF8(orderName);
         try {
             Connection con = ConnectionClass.CONN();
             String query = "INSERT INTO order_product (name,id_formular,finishgood,order_date) VALUES ('" + orderName + "'," + formularId + ",'0',GETDATE())";
@@ -32,5 +33,15 @@ public class InsertDB {
                     Toast.LENGTH_SHORT).show();
         }
         return rs;
+    }
+
+    public static String convertToUTF8(String s) {
+        String out = null;
+        try {
+            out = new String(s.getBytes("WINDOWS-874"), "ISO-8859-1");
+        } catch (java.io.UnsupportedEncodingException e) {
+            return null;
+        }
+        return out;
     }
 }

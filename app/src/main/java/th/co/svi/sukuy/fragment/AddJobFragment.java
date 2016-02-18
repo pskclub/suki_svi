@@ -56,7 +56,7 @@ public class AddJobFragment extends Fragment implements AdapterView.OnItemSelect
                 InsertDB insertOrder = new InsertDB();
                 int result = insertOrder.Product(getActivity(), txtName.getText().toString(), formularId);
                 if (result == 1) {
-                    Toast.makeText(getActivity(), "เสร็จแล้ว", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "เพิ่มเสร็จแล้ว", Toast.LENGTH_SHORT).show();
                     getActivity().setResult(3);
                     getActivity().finish();
                 }

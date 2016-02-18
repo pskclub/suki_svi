@@ -18,14 +18,13 @@ public class SelectDB {
         ConnectionClass = new ConnectionDB();
     }
 
-    public ResultSet ProductAll(Context context, String orderName, String formularName) {
+    public ResultSet ProductAll(Context context) {
         ResultSet rs = null;
         try {
             Connection con = ConnectionClass.CONN();
-            String query = "";
+            String query = "select * from order_product order by id_order DESC";
             Statement stmt = con.createStatement();
             rs = stmt.executeQuery(query);
-            con.close();
         } catch (SQLException e) {
             Toast.makeText(context, "DB มีปัญหา",
                     Toast.LENGTH_SHORT).show();

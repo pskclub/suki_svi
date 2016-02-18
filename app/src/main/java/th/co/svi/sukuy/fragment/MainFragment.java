@@ -1,38 +1,30 @@
 package th.co.svi.sukuy.fragment;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.FrameLayout;
 import android.widget.GridView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.baoyz.widget.PullRefreshLayout;
 
-import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import th.co.svi.sukuy.R;
 import th.co.svi.sukuy.activity.AddJobActivity;
-import th.co.svi.sukuy.activity.MainActivity;
 import th.co.svi.sukuy.adapter.JobMainListAdapter;
-import th.co.svi.sukuy.manager.ConnectionDB;
-import th.co.svi.sukuy.view.JobMainListItem;
+import th.co.svi.sukuy.manager.SelectDB;
 
 
 /**
@@ -43,7 +35,6 @@ public class MainFragment extends Fragment {
     TextView txtErr;
     JobMainListAdapter listAdapter;
     PullRefreshLayout layout;
-    ConnectionDB connectionClass;
     ArrayList<HashMap<String, String>> MyArrList;
     Map<String, String> map;
     FloatingActionButton fbtAdd;
@@ -63,44 +54,40 @@ public class MainFragment extends Fragment {
 
 
     private void showList() {
-        connectionClass = new ConnectionDB();
+        SelectDB selOrder = new SelectDB();
+        ResultSet rs = selOrder.ProductAll(getActivity());
+        txtErr.setVisibility(View.GONE);
+        MyArrList = new ArrayList<HashMap<String, String>>();
         try {
-            Connection con = connectionClass.CONN();
-            if (con == null) {
-                txtErr.setText("ไม่สามารถเชื่อมต่อ Server ได้");
-                txtErr.setVisibility(View.VISIBLE);
-//                Toast.makeText(getContext(), "ไม่สามารถเชื่อมต่อ Server ได้",
-//                        Toast.LENGTH_SHORT).show();
-            } else {
-                txtErr.setVisibility(View.GONE);
-                String query = "select * from order_product";
-                Statement stmt = con.createStatement();
-                ResultSet rs = stmt.executeQuery(query);
-                MyArrList = new ArrayList<HashMap<String, String>>();
-                if (rs != null && rs.next()) {
-                    do {
-                        map = new HashMap<String, String>();
-                        map.put("id", rs.getString("id_order"));
-                        map.put("date", rs.getString("order_date"));
-                        map.put("finish", rs.getString("finishgood"));
-                        map.put("name", rs.getString("name"));
-                        map.put("use", "");
-                        MyArrList.add((HashMap<String, String>) map);
-                    } while (rs.next());
-                    rs.close();
-                }
-                listAdapter = new JobMainListAdapter(getContext(), MyArrList);
-                listView.setAdapter(listAdapter);
+            if (rs != null && rs.next()) {
+                do {
+                    map = new HashMap<String, String>();
+                    map.put("id", rs.getString("id_order"));
+                    map.put("date", rs.getString("order_date"));
+                    map.put("finish", rs.getString("finishgood"));
+                    map.put("name", convertFromUTF8(rs.getString("name")));
+                    map.put("use", "");
+                    MyArrList.add((HashMap<String, String>) map);
+                } while (rs.next());
             }
+
         } catch (SQLException e) {
-            txtErr.setText("ไม่สามารถเชื่อมต่อ Server5555 ได้");
-            txtErr.setVisibility(View.VISIBLE);
+            Toast.makeText(getActivity(), "" + e.toString(),
+                    Toast.LENGTH_SHORT).show();
         }
-
-
+        listAdapter = new JobMainListAdapter(getContext(), MyArrList);
+        listView.setAdapter(listAdapter);
     }
 
-
+    public static String convertFromUTF8(String s) {
+        String out = null;
+        try {
+            out = new String(s.getBytes("ISO-8859-1"), "WINDOWS-874");
+        } catch (java.io.UnsupportedEncodingException e) {
+            return null;
+        }
+        return out;
+    }
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
