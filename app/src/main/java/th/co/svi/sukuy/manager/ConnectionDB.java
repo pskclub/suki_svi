@@ -1,6 +1,7 @@
 package th.co.svi.sukuy.manager;
 
 import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.StrictMode;
 import android.util.Log;
 import android.widget.Toast;
@@ -14,7 +15,7 @@ import java.sql.SQLException;
 /**
  * Created by MIS_Student5 on 10/2/2559.
  */
-public class ConnectionDB {
+public class ConnectionDB extends AsyncTask<String, Void, String> {
     String ip = "12.1.2.18";
     String classs = "net.sourceforge.jtds.jdbc.Driver";
     String db = "project-test";
@@ -47,6 +48,11 @@ public class ConnectionDB {
                     Toast.LENGTH_SHORT).show();
         }
         return conn;
+    }
+
+    @Override
+    protected String doInBackground(String... strings) {
+        return null;
     }
 }
 

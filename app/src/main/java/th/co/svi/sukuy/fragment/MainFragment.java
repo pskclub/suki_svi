@@ -63,7 +63,6 @@ public class MainFragment extends Fragment {
 
 
     private void showList() {
-
         connectionClass = new ConnectionDB();
         try {
             Connection con = connectionClass.CONN();
@@ -97,6 +96,8 @@ public class MainFragment extends Fragment {
             txtErr.setText("ไม่สามารถเชื่อมต่อ Server ได้");
             txtErr.setVisibility(View.VISIBLE);
         }
+
+
     }
 
 
