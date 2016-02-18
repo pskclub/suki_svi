@@ -19,13 +19,11 @@ public class InsertDB {
         ConnectionClass = new ConnectionDB();
     }
 
-    public int Product(Context context,String orderName ,int formularId) {
+    public int Product(Context context, String orderName, int formularId) {
         int rs = 0;
         try {
             Connection con = ConnectionClass.CONN();
-            Date d = new Date();
-             CharSequence date = DateFormat.format("yyyy-MM-dd hh:mm:ss", d.getTime());
-            String query = "INSERT INTO order_product (name,id_formular,order_date) VALUES ('"+orderName+"',"+formularId+",)";
+            String query = "INSERT INTO order_product (name,id_formular,finishgood,order_date) VALUES ('" + orderName + "'," + formularId + ",'0',GETDATE())";
             Statement stmt = con.createStatement();
             rs = stmt.executeUpdate(query);
             con.close();
@@ -33,6 +31,6 @@ public class InsertDB {
             Toast.makeText(context, "DB มีปัญหา" + e.toString(),
                     Toast.LENGTH_SHORT).show();
         }
-         return rs;
+        return rs;
     }
 }

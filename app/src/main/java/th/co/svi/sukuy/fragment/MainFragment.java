@@ -93,7 +93,7 @@ public class MainFragment extends Fragment {
                 listView.setAdapter(listAdapter);
             }
         } catch (SQLException e) {
-            txtErr.setText("ไม่สามารถเชื่อมต่อ Server ได้");
+            txtErr.setText("ไม่สามารถเชื่อมต่อ Server5555 ได้");
             txtErr.setVisibility(View.VISIBLE);
         }
 
