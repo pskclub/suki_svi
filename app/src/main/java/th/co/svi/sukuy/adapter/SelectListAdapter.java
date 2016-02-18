@@ -8,16 +8,16 @@ import android.widget.BaseAdapter;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import th.co.svi.sukuy.view.JobMainListItem;
+import th.co.svi.sukuy.view.SelectChoiceListItem;
 
 /**
  * Created by MIS_Student5 on 11/2/2559.
  */
-public class JobMainListAdapter extends BaseAdapter {
+public class SelectListAdapter extends BaseAdapter {
     Context context;
     ArrayList<HashMap<String, String>> Data = new ArrayList<>();
 
-    public JobMainListAdapter(Context context, ArrayList<HashMap<String, String>> Data) {
+    public SelectListAdapter(Context context, ArrayList<HashMap<String, String>> Data) {
         this.context = context;
         this.Data = Data;
     }
@@ -39,21 +39,16 @@ public class JobMainListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
-        JobMainListItem item;
-        String success = "";
+        SelectChoiceListItem item;
         if (view != null) {
-            item = (JobMainListItem) view;
+            item = (SelectChoiceListItem) view;
         } else {
-            item = new JobMainListItem(viewGroup.getContext());
+            item = new SelectChoiceListItem(viewGroup.getContext());
 
         }
-        if(Data.get(i).get("use").toString().equals(Data.get(i).get("choice").toString())){
-            success = "สำเร็จแล้ว";
-        }
         item.setText(context,
-                Data.get(i).get("name").toString(), "เหลืออีก " +
-                        Data.get(i).get("use").toString() +"/"+
-                        Data.get(i).get("choice").toString(),success);
+                Data.get(i).get("name").toString(),
+                Data.get(i).get("url").toString());
         return item;
     }
 }

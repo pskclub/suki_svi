@@ -2,9 +2,6 @@ package th.co.svi.sukuy.view;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.widget.CardView;
@@ -16,36 +13,29 @@ import com.inthecheesefactory.thecheeselibrary.view.BaseCustomViewGroup;
 import com.inthecheesefactory.thecheeselibrary.view.state.BundleSavedState;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-
 import th.co.svi.sukuy.R;
 
 /**
  * Created by nuuneoi on 11/16/2014.
  */
-public class JobMainListItem extends BaseCustomViewGroup {
+public class SelectChoiceListItem extends BaseCustomViewGroup {
     private TextView txtName;
-    private TextView txtProgress;
-    private TextView txtSuccess;
-    private CardView cardView;
+    private ImageView img;
 
-    public JobMainListItem(Context context) {
+    public SelectChoiceListItem(Context context) {
         super(context);
         initInflate();
         initInstances();
     }
 
-    public JobMainListItem(Context context, AttributeSet attrs) {
+    public SelectChoiceListItem(Context context, AttributeSet attrs) {
         super(context, attrs);
         initInflate();
         initInstances();
         initWithAttrs(attrs, 0, 0);
     }
 
-    public JobMainListItem(Context context, AttributeSet attrs, int defStyleAttr) {
+    public SelectChoiceListItem(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         initInflate();
         initInstances();
@@ -53,7 +43,7 @@ public class JobMainListItem extends BaseCustomViewGroup {
     }
 
     @TargetApi(21)
-    public JobMainListItem(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public SelectChoiceListItem(Context context, AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr, defStyleRes);
         initInflate();
         initInstances();
@@ -61,26 +51,21 @@ public class JobMainListItem extends BaseCustomViewGroup {
     }
 
     private void initInflate() {
-        inflate(getContext(), R.layout.list_main, this);
+        inflate(getContext(), R.layout.list_select, this);
     }
 
     private void initInstances() {
         // findViewById here
         txtName = (TextView) findViewById(R.id.txtName);
-        txtProgress = (TextView) findViewById(R.id.txtProgress);
-        txtSuccess = (TextView) findViewById(R.id.txtSuccess);
-        cardView = (CardView) findViewById(R.id.card_view);
+        img = (ImageView) findViewById(R.id.imageView);
 
     }
 
-    public void setText(Context context, String txtName, String txtProgress, String txtSuccess) {
+    public void setText(Context context, String txtName, String url) {
         this.txtName.setText(txtName);
-        this.txtProgress.setText(txtProgress);
-        this.txtSuccess.setText(txtSuccess);
-
-       /* Picasso.with(context).load(txt2).placeholder(R.drawable.ic_cached_black_48dp).resize(250, 250)
-                .centerCrop().into(img);*/
-//        this.txt2.setText(txt2);
+        Picasso.with(context).load(url).placeholder(R.drawable.ic_cached_black_48dp)
+                .fit()
+                .centerCrop().into(img);
     }
 
     private void initWithAttrs(AttributeSet attrs, int defStyleAttr, int defStyleRes) {

@@ -26,7 +26,36 @@ public class SelectDB {
             Statement stmt = con.createStatement();
             rs = stmt.executeQuery(query);
         } catch (SQLException e) {
-            Toast.makeText(context, "DB มีปัญหา",
+            Toast.makeText(context, "" + e.toString(),
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        return rs;
+    }
+
+    public ResultSet CountChoiceAsProduct(Context context, String i) {
+        ResultSet rs = null;
+        try {
+            Connection con = ConnectionClass.CONN();
+            String query = "select COUNT(*) AS NumberChoice from formular_detail where id_formular='" + i + "'";
+            Statement stmt = con.createStatement();
+            rs = stmt.executeQuery(query);
+        } catch (SQLException e) {
+            Toast.makeText(context, "" + e.toString(),
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        return rs;
+    }
+    public ResultSet CountUseAsProduct(Context context, String i) {
+        ResultSet rs = null;
+        try {
+            Connection con = ConnectionClass.CONN();
+            String query = "select COUNT(*) AS NumberUse from detail where id_order='" + i + "'";
+            Statement stmt = con.createStatement();
+            rs = stmt.executeQuery(query);
+        } catch (SQLException e) {
+            Toast.makeText(context, "" + e.toString(),
                     Toast.LENGTH_SHORT).show();
         }
 

@@ -23,6 +23,7 @@ import java.util.Map;
 
 import th.co.svi.sukuy.R;
 import th.co.svi.sukuy.activity.AddJobActivity;
+import th.co.svi.sukuy.activity.SelectActivity;
 import th.co.svi.sukuy.adapter.JobMainListAdapter;
 import th.co.svi.sukuy.manager.SelectDB;
 
@@ -61,19 +62,26 @@ public class MainFragment extends Fragment {
         try {
             if (rs != null && rs.next()) {
                 do {
+                    SelectDB CountChoice = new SelectDB();
+                    ResultSet rs2 = CountChoice.CountChoiceAsProduct(getActivity(), rs.getString("id_formular"));
+                    rs2.next();
+                    SelectDB CountUse = new SelectDB();
+                    ResultSet rs3 = CountChoice.CountUseAsProduct(getActivity(), rs.getString("id_order"));
+                    rs3.next();
                     map = new HashMap<String, String>();
                     map.put("id", rs.getString("id_order"));
                     map.put("date", rs.getString("order_date"));
                     map.put("finish", rs.getString("finishgood"));
                     map.put("name", convertFromUTF8(rs.getString("name")));
-                    map.put("use", "");
+                    map.put("choice", rs2.getString("NumberChoice"));
+                    map.put("use", rs3.getString("NumberUse"));
                     MyArrList.add((HashMap<String, String>) map);
                 } while (rs.next());
             }
 
         } catch (SQLException e) {
-            Toast.makeText(getActivity(), "" + e.toString(),
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "5555" + e.toString(),
+                    Toast.LENGTH_LONG).show();
         }
         listAdapter = new JobMainListAdapter(getContext(), MyArrList);
         listView.setAdapter(listAdapter);
@@ -88,6 +96,7 @@ public class MainFragment extends Fragment {
         }
         return out;
     }
+
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -96,6 +105,8 @@ public class MainFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent send = new Intent(getActivity(), SelectActivity.class);
+                startActivityForResult(send, 4);
               /*  JobMainListItem item;
                 if (view != null) {
                     item = (JobMainListItem) view;
