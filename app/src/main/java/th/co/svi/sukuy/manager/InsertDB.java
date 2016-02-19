@@ -2,7 +2,10 @@ package th.co.svi.sukuy.manager;
 
 import android.content.Context;
 import android.text.format.DateFormat;
+import android.util.Log;
 import android.widget.Toast;
+
+import com.inthecheesefactory.thecheeselibrary.manager.Contextor;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -30,6 +33,10 @@ public class InsertDB {
             con.close();
         } catch (SQLException e) {
             Toast.makeText(context, "DB มีปัญหา" + e.toString(),
+                    Toast.LENGTH_SHORT).show();
+        }catch (NullPointerException e) {
+            Log.e("ERRO", e.getMessage());
+            Toast.makeText(Contextor.getInstance().getContext(), "การเชื่อมต่อมีปัญหา",
                     Toast.LENGTH_SHORT).show();
         }
         return rs;

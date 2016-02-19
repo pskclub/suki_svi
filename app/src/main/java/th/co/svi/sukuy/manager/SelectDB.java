@@ -1,6 +1,7 @@
 package th.co.svi.sukuy.manager;
 
 import android.content.Context;
+import android.util.Log;
 import android.widget.Toast;
 
 import java.sql.Connection;
@@ -28,6 +29,67 @@ public class SelectDB {
         } catch (SQLException e) {
             Toast.makeText(context, "" + e.toString(),
                     Toast.LENGTH_SHORT).show();
+        } catch (NullPointerException e) {
+            Log.e("ERRO", e.getMessage());
+            Toast.makeText(context, "การเชื่อมต่อมีปัญหา",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        return rs;
+    }
+
+    public ResultSet ProductById(Context context, String i) {
+        ResultSet rs = null;
+        try {
+            Connection con = ConnectionClass.CONN();
+            String query = "select * from order_product where id_order='" + i + "'";
+            Statement stmt = con.createStatement();
+            rs = stmt.executeQuery(query);
+        } catch (SQLException e) {
+            Toast.makeText(context, "" + e.toString(),
+                    Toast.LENGTH_SHORT).show();
+        } catch (NullPointerException e) {
+            Log.e("ERRO", e.getMessage());
+            Toast.makeText(context, "การเชื่อมต่อมีปัญหา",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        return rs;
+    }
+
+    public ResultSet FormularDetailById(Context context, String i) {
+        ResultSet rs = null;
+        try {
+            Connection con = ConnectionClass.CONN();
+            String query = "select * from formular_detail where id_formular='" + i + "'";
+            Statement stmt = con.createStatement();
+            rs = stmt.executeQuery(query);
+        } catch (SQLException e) {
+            Toast.makeText(context, "" + e.toString(),
+                    Toast.LENGTH_SHORT).show();
+        } catch (NullPointerException e) {
+            Log.e("ERRO", e.getMessage());
+            Toast.makeText(context, "การเชื่อมต่อมีปัญหา",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        return rs;
+    }
+
+    public ResultSet ChoiceById(Context context, String i) {
+        ResultSet rs = null;
+        try {
+            Connection con = ConnectionClass.CONN();
+            String query = "select * from choice where id_choice='" + i + "'";
+            Statement stmt = con.createStatement();
+            rs = stmt.executeQuery(query);
+        } catch (SQLException e) {
+            Toast.makeText(context, "" + e.toString(),
+                    Toast.LENGTH_SHORT).show();
+        } catch (NullPointerException e) {
+            Log.e("ERRO", e.getMessage());
+            Toast.makeText(context, "การเชื่อมต่อมีปัญหา",
+                    Toast.LENGTH_SHORT).show();
         }
 
         return rs;
@@ -43,10 +105,15 @@ public class SelectDB {
         } catch (SQLException e) {
             Toast.makeText(context, "" + e.toString(),
                     Toast.LENGTH_SHORT).show();
+        } catch (NullPointerException e) {
+            Log.e("ERRO", e.getMessage());
+            Toast.makeText(context, "การเชื่อมต่อมีปัญหา",
+                    Toast.LENGTH_SHORT).show();
         }
 
         return rs;
     }
+
     public ResultSet CountUseAsProduct(Context context, String i) {
         ResultSet rs = null;
         try {
@@ -56,6 +123,10 @@ public class SelectDB {
             rs = stmt.executeQuery(query);
         } catch (SQLException e) {
             Toast.makeText(context, "" + e.toString(),
+                    Toast.LENGTH_SHORT).show();
+        } catch (NullPointerException e) {
+            Log.e("ERRO", e.getMessage());
+            Toast.makeText(context, "การเชื่อมต่อมีปัญหา",
                     Toast.LENGTH_SHORT).show();
         }
 
@@ -70,7 +141,11 @@ public class SelectDB {
             Statement stmt = con.createStatement();
             rs = stmt.executeQuery(query);
         } catch (SQLException e) {
-            Toast.makeText(context, "DB มีปัญหา",
+            Toast.makeText(context, "" + e.toString(),
+                    Toast.LENGTH_SHORT).show();
+        } catch (NullPointerException e) {
+            Log.e("ERRO", e.getMessage());
+            Toast.makeText(context, "การเชื่อมต่อมีปัญหา",
                     Toast.LENGTH_SHORT).show();
         }
 

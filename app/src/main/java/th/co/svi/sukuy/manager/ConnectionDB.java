@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.inthecheesefactory.thecheeselibrary.manager.Contextor;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -15,7 +16,7 @@ import java.sql.SQLException;
 /**
  * Created by MIS_Student5 on 10/2/2559.
  */
-public class ConnectionDB extends AsyncTask<String, Void, String> {
+public class ConnectionDB {
     String ip = "12.1.2.18";
     String classs = "net.sourceforge.jtds.jdbc.Driver";
     String db = "project-test";
@@ -38,10 +39,16 @@ public class ConnectionDB extends AsyncTask<String, Void, String> {
 
         } catch (SQLException se) {
             Log.e("ERRO", se.getMessage());
+            Toast.makeText(Contextor.getInstance().getContext(), "ไม่สามารถเชื่อมต่อ Server ได้",
+                    Toast.LENGTH_SHORT).show();
         } catch (ClassNotFoundException e) {
             Log.e("ERRO", e.getMessage());
+            Toast.makeText(Contextor.getInstance().getContext(), "ไม่สามารถเชื่อมต่อ Server ได้",
+                    Toast.LENGTH_SHORT).show();
         } catch (Exception e) {
             Log.e("ERRO", e.getMessage());
+            Toast.makeText(Contextor.getInstance().getContext(), "ไม่สามารถเชื่อมต่อ Server ได้",
+                    Toast.LENGTH_SHORT).show();
         }
         if (conn == null) {
             Toast.makeText(Contextor.getInstance().getContext(), "ไม่สามารถเชื่อมต่อ Server ได้",
@@ -50,9 +57,5 @@ public class ConnectionDB extends AsyncTask<String, Void, String> {
         return conn;
     }
 
-    @Override
-    protected String doInBackground(String... strings) {
-        return null;
-    }
 }
 

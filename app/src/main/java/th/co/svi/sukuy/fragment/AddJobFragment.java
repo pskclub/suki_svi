@@ -1,6 +1,8 @@
 package th.co.svi.sukuy.fragment;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,6 +21,7 @@ import java.util.HashMap;
 import java.util.List;
 
 import th.co.svi.sukuy.R;
+import th.co.svi.sukuy.adapter.SelectListAdapter;
 import th.co.svi.sukuy.manager.InsertDB;
 import th.co.svi.sukuy.manager.SelectDB;
 
@@ -32,6 +35,9 @@ public class AddJobFragment extends Fragment implements AdapterView.OnItemSelect
     Button btnSubmit;
     EditText txtName;
     HashMap<String, String> formularMap;
+    Thread thread;
+    List<String> formularList;
+    boolean running = false;
 
     public AddJobFragment() {
         super();
@@ -73,28 +79,59 @@ public class AddJobFragment extends Fragment implements AdapterView.OnItemSelect
     }
 
     private void showList() {
-
-        SelectDB formulatSel = new SelectDB();
-        ResultSet rs = formulatSel.FormularAll(getActivity());
-        List<String> formularList = new ArrayList<String>();
-        formularMap = new HashMap<String, String>();
-        try {
-            if (rs != null && rs.next()) {
-                do {
-                    formularMap.put(rs.getString("name_formular"), rs.getString("id_formular"));
-                    formularList.add(rs.getString("name_formular"));
-                } while (rs.next());
+        if (!running) {
+            if(Looper.myLooper() == null) { // check already Looper is associated or not.
+                Looper.prepare(); // No Looper is defined So define a new one
             }
-        } catch (SQLException e) {
-            e.printStackTrace();
+            running = true;
+            thread = new Thread(new Runnable() {
+                public void run() {
+                    SelectDB formulatSel = new SelectDB();
+                    ResultSet rs = formulatSel.FormularAll(getActivity());
+                    formularList = new ArrayList<String>();
+                    formularMap = new HashMap<String, String>();
+                    try {
+                        if (rs != null && rs.next()) {
+                            do {
+                                formularMap.put(rs.getString("name_formular"), rs.getString("id_formular"));
+                                formularList.add(rs.getString("name_formular"));
+                            } while (rs.next());
+                        }
+                        thread.sleep(200);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }catch (RuntimeException e){
+                        Toast.makeText(getActivity(), "" + e.toString(),
+                                Toast.LENGTH_LONG).show();
+                    }
+                    if(Looper.myLooper() != null) { // check already Looper is associated or not.
+                        Looper.myLooper().quit();
+                    }
+
+                    handler.sendEmptyMessage(1);
+                    if(Looper.myLooper() != null) { // check already Looper is associated or not.
+                        Looper.loop();
+                    }
+
+                }
+            });
+            thread.start();
+            spinner.setOnItemSelectedListener(this);
         }
-        ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(),
-                android.R.layout.simple_spinner_item, formularList);
-        dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        spinner.setOnItemSelectedListener(this);
-        spinner.setAdapter(dataAdapter);
     }
 
+    public Handler handler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(getActivity(),
+                    android.R.layout.simple_spinner_item, formularList);
+            dataAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+            spinner.setAdapter(dataAdapter);
+            running = false;
+
+        }
+    };
 
     @Override
     public void onStart() {

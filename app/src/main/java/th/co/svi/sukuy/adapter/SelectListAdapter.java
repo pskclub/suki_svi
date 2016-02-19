@@ -47,8 +47,8 @@ public class SelectListAdapter extends BaseAdapter {
 
         }
         item.setText(context,
-                Data.get(i).get("name").toString(),
-                Data.get(i).get("url").toString());
+                Data.get(i).get("namechoice").toString(),
+                Data.get(i).get("pic").toString());
         return item;
     }
 }

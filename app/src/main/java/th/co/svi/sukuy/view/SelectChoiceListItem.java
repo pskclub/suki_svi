@@ -56,7 +56,7 @@ public class SelectChoiceListItem extends BaseCustomViewGroup {
 
     private void initInstances() {
         // findViewById here
-        txtName = (TextView) findViewById(R.id.txtName);
+        txtName = (TextView) findViewById(R.id.txtNameChoice);
         img = (ImageView) findViewById(R.id.imageView);
 
     }
@@ -64,7 +64,7 @@ public class SelectChoiceListItem extends BaseCustomViewGroup {
     public void setText(Context context, String txtName, String url) {
         this.txtName.setText(txtName);
         Picasso.with(context).load(url).placeholder(R.drawable.ic_cached_black_48dp)
-                .fit()
+                .resize(200, 200)
                 .centerCrop().into(img);
     }
 

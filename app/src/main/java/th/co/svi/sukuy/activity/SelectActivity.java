@@ -21,9 +21,15 @@ public class SelectActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-           if (savedInstanceState == null) {
+        Bundle extras = getIntent().getExtras();
+
+        if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction()
-                    .add(R.id.contentContainer, SelectFragment.newInstance())
+                    .add(R.id.contentContainer,
+                            SelectFragment.newInstance(
+                            extras.getString("id_order"),
+                            extras.getString("id_formular")
+                            ))
                     .commit();
 
         }

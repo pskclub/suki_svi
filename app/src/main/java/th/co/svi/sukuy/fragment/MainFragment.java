@@ -2,6 +2,8 @@ package th.co.svi.sukuy.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -25,6 +27,7 @@ import th.co.svi.sukuy.R;
 import th.co.svi.sukuy.activity.AddJobActivity;
 import th.co.svi.sukuy.activity.SelectActivity;
 import th.co.svi.sukuy.adapter.JobMainListAdapter;
+import th.co.svi.sukuy.adapter.SelectListAdapter;
 import th.co.svi.sukuy.manager.SelectDB;
 
 
@@ -40,6 +43,8 @@ public class MainFragment extends Fragment {
     Map<String, String> map;
     FloatingActionButton fbtAdd;
     CoordinatorLayout rootLayout;
+    Thread thread;
+    boolean running = false;
 
 
     public MainFragment() {
@@ -55,37 +60,72 @@ public class MainFragment extends Fragment {
 
 
     private void showList() {
-        SelectDB selOrder = new SelectDB();
-        ResultSet rs = selOrder.ProductAll(getActivity());
-        txtErr.setVisibility(View.GONE);
-        MyArrList = new ArrayList<HashMap<String, String>>();
-        try {
-            if (rs != null && rs.next()) {
-                do {
-                    SelectDB CountChoice = new SelectDB();
-                    ResultSet rs2 = CountChoice.CountChoiceAsProduct(getActivity(), rs.getString("id_formular"));
-                    rs2.next();
-                    SelectDB CountUse = new SelectDB();
-                    ResultSet rs3 = CountChoice.CountUseAsProduct(getActivity(), rs.getString("id_order"));
-                    rs3.next();
-                    map = new HashMap<String, String>();
-                    map.put("id", rs.getString("id_order"));
-                    map.put("date", rs.getString("order_date"));
-                    map.put("finish", rs.getString("finishgood"));
-                    map.put("name", convertFromUTF8(rs.getString("name")));
-                    map.put("choice", rs2.getString("NumberChoice"));
-                    map.put("use", rs3.getString("NumberUse"));
-                    MyArrList.add((HashMap<String, String>) map);
-                } while (rs.next());
-            }
+        if (!running) {
+            thread = new Thread(new Runnable() {
+                public void run() {
+                    if(Looper.myLooper() == null) { // check already Looper is associated or not.
+                        Looper.prepare(); // No Looper is defined So define a new one
+                    }
+                    running = true;
+                    SelectDB selOrder = new SelectDB();
+                    ResultSet rs = selOrder.ProductAll(getActivity());
+                    txtErr.setVisibility(View.GONE);
+                    MyArrList = new ArrayList<>();
+                    try {
+                        if (rs != null && rs.next()) {
+                            do {
+                                SelectDB CountChoice = new SelectDB();
+                                ResultSet rs2 = CountChoice.CountChoiceAsProduct(getActivity(), rs.getString("id_formular"));
+                                rs2.next();
+                                SelectDB CountUse = new SelectDB();
+                                ResultSet rs3 = CountChoice.CountUseAsProduct(getActivity(), rs.getString("id_order"));
+                                rs3.next();
+                                map = new HashMap<String, String>();
+                                map.put("id", rs.getString("id_order"));
+                                map.put("date", rs.getString("order_date"));
+                                map.put("id_formular", rs.getString("id_formular"));
+                                map.put("finish", rs.getString("finishgood"));
+                                map.put("name", convertFromUTF8(rs.getString("name")));
+                                map.put("choice", rs2.getString("NumberChoice"));
+                                map.put("use", rs3.getString("NumberUse"));
+                                MyArrList.add((HashMap<String, String>) map);
+                            } while (rs.next());
+                        }
+                        thread.sleep(200);
 
-        } catch (SQLException e) {
-            Toast.makeText(getActivity(), "5555" + e.toString(),
-                    Toast.LENGTH_LONG).show();
+                    } catch (SQLException e) {
+                        Toast.makeText(getActivity(), "" + e.toString(),
+                                Toast.LENGTH_LONG).show();
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }catch (RuntimeException e){
+                        Toast.makeText(getActivity(), "" + e.toString(),
+                                Toast.LENGTH_LONG).show();
+                    }
+                    if(Looper.myLooper() != null) { // check already Looper is associated or not.
+                        Looper.myLooper().quit();
+                    }
+
+                    handler.sendEmptyMessage(1);
+                    if(Looper.myLooper() != null) { // check already Looper is associated or not.
+                        Looper.loop();
+                    }
+
+                }
+            });
+            thread.start();
         }
-        listAdapter = new JobMainListAdapter(getContext(), MyArrList);
-        listView.setAdapter(listAdapter);
     }
+
+    public Handler handler = new Handler() {
+        public void handleMessage(android.os.Message msg) {
+            layout.setRefreshing(false);
+            listAdapter = new JobMainListAdapter(getContext(), MyArrList);
+            listView.setAdapter(listAdapter);
+            running = false;
+
+        }
+    };
 
     public static String convertFromUTF8(String s) {
         String out = null;
@@ -106,6 +146,8 @@ public class MainFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Intent send = new Intent(getActivity(), SelectActivity.class);
+                send.putExtra("id_order", MyArrList.get(i).get("id"));
+                send.putExtra("id_formular", MyArrList.get(i).get("id_formular"));
                 startActivityForResult(send, 4);
               /*  JobMainListItem item;
                 if (view != null) {
@@ -131,7 +173,6 @@ public class MainFragment extends Fragment {
             @Override
             public void onRefresh() {
                 showList();
-                layout.setRefreshing(false);
             }
         });
         fbtAdd.setOnClickListener(new View.OnClickListener() {
