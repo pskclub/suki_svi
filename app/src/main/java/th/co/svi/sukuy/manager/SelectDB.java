@@ -133,6 +133,25 @@ public class SelectDB {
         return rs;
     }
 
+    public ResultSet CheckUseChoiceByDd(Context context, String i, String id_order) {
+        ResultSet rs = null;
+        try {
+            Connection con = ConnectionClass.CONN();
+            String query = "select  COUNT(*) AS NumberUse  from detail where id_order='" + id_order + "' AND id_choice='" + i + "'";
+            Statement stmt = con.createStatement();
+            rs = stmt.executeQuery(query);
+        } catch (SQLException e) {
+            Toast.makeText(context, "" + e.toString(),
+                    Toast.LENGTH_SHORT).show();
+        } catch (NullPointerException e) {
+            Log.e("ERRO", e.getMessage());
+            Toast.makeText(context, "การเชื่อมต่อมีปัญหา",
+                    Toast.LENGTH_SHORT).show();
+        }
+
+        return rs;
+    }
+
     public ResultSet FormularAll(Context context) {
         ResultSet rs = null;
         try {

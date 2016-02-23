@@ -17,12 +17,13 @@ import java.util.Date;
  */
 public class InsertDB {
     ConnectionDB ConnectionClass;
+    Context context = Contextor.getInstance().getContext();
 
     public InsertDB() {
         ConnectionClass = new ConnectionDB();
     }
 
-    public int Product(Context context, String orderName, int formularId) {
+    public int Product(String orderName, int formularId) {
         int rs = 0;
         orderName = convertToUTF8(orderName);
         try {
@@ -34,7 +35,27 @@ public class InsertDB {
         } catch (SQLException e) {
             Toast.makeText(context, "DB มีปัญหา" + e.toString(),
                     Toast.LENGTH_SHORT).show();
-        }catch (NullPointerException e) {
+        } catch (NullPointerException e) {
+            Log.e("ERRO", e.getMessage());
+            Toast.makeText(Contextor.getInstance().getContext(), "การเชื่อมต่อมีปัญหา",
+                    Toast.LENGTH_SHORT).show();
+        }
+        return rs;
+    }
+
+    public int Detail(String id_order, String id_employee, String id_choice) {
+        int rs = 0;
+        try {
+            Connection con = ConnectionClass.CONN();
+            String query = "INSERT INTO detail (id_order,id_employee,id_choice)" +
+                    " VALUES ('" + id_order + "'," + id_employee + ",'" + id_choice + "')";
+            Statement stmt = con.createStatement();
+            rs = stmt.executeUpdate(query);
+            con.close();
+        } catch (SQLException e) {
+            Toast.makeText(context, "DB มีปัญหา" + e.toString(),
+                    Toast.LENGTH_SHORT).show();
+        } catch (NullPointerException e) {
             Log.e("ERRO", e.getMessage());
             Toast.makeText(Contextor.getInstance().getContext(), "การเชื่อมต่อมีปัญหา",
                     Toast.LENGTH_SHORT).show();
@@ -51,4 +72,5 @@ public class InsertDB {
         }
         return out;
     }
+
 }

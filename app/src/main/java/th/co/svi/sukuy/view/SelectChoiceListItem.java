@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v7.widget.CardView;
 import android.util.AttributeSet;
+import android.view.View;
+import android.widget.CheckBox;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -19,8 +21,9 @@ import th.co.svi.sukuy.R;
  * Created by nuuneoi on 11/16/2014.
  */
 public class SelectChoiceListItem extends BaseCustomViewGroup {
-    private TextView txtName;
+    private TextView txtName,txtSucess;
     private ImageView img;
+    private CheckBox checkSel;
 
     public SelectChoiceListItem(Context context) {
         super(context);
@@ -57,6 +60,8 @@ public class SelectChoiceListItem extends BaseCustomViewGroup {
     private void initInstances() {
         // findViewById here
         txtName = (TextView) findViewById(R.id.txtNameChoice);
+        txtSucess = (TextView) findViewById(R.id.txtNameSuccess);
+        checkSel = (CheckBox) findViewById(R.id.checkSel);
         img = (ImageView) findViewById(R.id.imageView);
 
     }
@@ -66,6 +71,14 @@ public class SelectChoiceListItem extends BaseCustomViewGroup {
         Picasso.with(context).load(url).placeholder(R.drawable.ic_cached_black_48dp)
                 .resize(200, 200)
                 .centerCrop().into(img);
+    }
+    public void setDisable() {
+        this.txtSucess.setVisibility(View.VISIBLE);
+        this.checkSel.setVisibility(View.GONE);
+    }
+
+    public void setChecked(boolean check) {
+        this.checkSel.setChecked(check);
     }
 
     private void initWithAttrs(AttributeSet attrs, int defStyleAttr, int defStyleRes) {

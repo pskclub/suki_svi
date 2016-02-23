@@ -49,6 +49,15 @@ public class SelectListAdapter extends BaseAdapter {
         item.setText(context,
                 Data.get(i).get("namechoice").toString(),
                 Data.get(i).get("pic").toString());
+
+        if (Data.get(i).get("check").toString().equals("true")) {
+            item.setChecked(true);
+        } else {
+            item.setChecked(false);
+        }
+        if (Data.get(i).get("checkBefore").toString().equals("true")) {
+            item.setDisable();
+        }
         return item;
     }
 }

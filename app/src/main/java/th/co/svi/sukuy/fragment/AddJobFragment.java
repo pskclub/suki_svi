@@ -4,12 +4,14 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
@@ -33,6 +35,7 @@ public class AddJobFragment extends Fragment implements AdapterView.OnItemSelect
     Spinner spinner;
     int formularId;
     Button btnSubmit;
+
     EditText txtName;
     HashMap<String, String> formularMap;
     Thread thread;
@@ -56,15 +59,20 @@ public class AddJobFragment extends Fragment implements AdapterView.OnItemSelect
         View rootView = inflater.inflate(R.layout.fragment_add_job, container, false);
         initInstances(rootView);
         showList();
+
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                InsertDB insertOrder = new InsertDB();
-                int result = insertOrder.Product(getActivity(), txtName.getText().toString(), formularId);
-                if (result == 1) {
-                    Toast.makeText(getActivity(), "เพิ่มเสร็จแล้ว", Toast.LENGTH_SHORT).show();
-                    getActivity().setResult(3);
-                    getActivity().finish();
+                if (txtName.getText().toString().trim().equals("")) {
+                    InsertDB insertOrder = new InsertDB();
+                    int result = insertOrder.Product(txtName.getText().toString(), formularId);
+                    if (result == 1) {
+                        Toast.makeText(getActivity(), "เพิ่มเสร็จแล้ว", Toast.LENGTH_SHORT).show();
+                        getActivity().setResult(3);
+                        getActivity().finish();
+                    }
+                } else {
+                    Toast.makeText(getActivity(), "กรุณากรอกข้อมูลให้ครบ", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -73,14 +81,16 @@ public class AddJobFragment extends Fragment implements AdapterView.OnItemSelect
 
     private void initInstances(View rootView) {
         // init instance with rootView.findViewById here
+
         spinner = (Spinner) rootView.findViewById(R.id.spinner);
         txtName = (EditText) rootView.findViewById(R.id.txtName);
         btnSubmit = (Button) rootView.findViewById(R.id.btnSubmit);
+
     }
 
     private void showList() {
         if (!running) {
-            if(Looper.myLooper() == null) { // check already Looper is associated or not.
+            if (Looper.myLooper() == null) { // check already Looper is associated or not.
                 Looper.prepare(); // No Looper is defined So define a new one
             }
             running = true;
@@ -88,8 +98,8 @@ public class AddJobFragment extends Fragment implements AdapterView.OnItemSelect
                 public void run() {
                     SelectDB formulatSel = new SelectDB();
                     ResultSet rs = formulatSel.FormularAll(getActivity());
-                    formularList = new ArrayList<String>();
-                    formularMap = new HashMap<String, String>();
+                    formularList = new ArrayList<>();
+                    formularMap = new HashMap<>();
                     try {
                         if (rs != null && rs.next()) {
                             do {
@@ -102,16 +112,16 @@ public class AddJobFragment extends Fragment implements AdapterView.OnItemSelect
                         e.printStackTrace();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                    }catch (RuntimeException e){
+                    } catch (RuntimeException e) {
                         Toast.makeText(getActivity(), "" + e.toString(),
                                 Toast.LENGTH_LONG).show();
                     }
-                    if(Looper.myLooper() != null) { // check already Looper is associated or not.
+                    if (Looper.myLooper() != null) { // check already Looper is associated or not.
                         Looper.myLooper().quit();
                     }
 
                     handler.sendEmptyMessage(1);
-                    if(Looper.myLooper() != null) { // check already Looper is associated or not.
+                    if (Looper.myLooper() != null) { // check already Looper is associated or not.
                         Looper.loop();
                     }
 

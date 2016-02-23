@@ -63,7 +63,7 @@ public class MainFragment extends Fragment {
         if (!running) {
             thread = new Thread(new Runnable() {
                 public void run() {
-                    if(Looper.myLooper() == null) { // check already Looper is associated or not.
+                    if (Looper.myLooper() == null) { // check already Looper is associated or not.
                         Looper.prepare(); // No Looper is defined So define a new one
                     }
                     running = true;
@@ -78,9 +78,9 @@ public class MainFragment extends Fragment {
                                 ResultSet rs2 = CountChoice.CountChoiceAsProduct(getActivity(), rs.getString("id_formular"));
                                 rs2.next();
                                 SelectDB CountUse = new SelectDB();
-                                ResultSet rs3 = CountChoice.CountUseAsProduct(getActivity(), rs.getString("id_order"));
+                                ResultSet rs3 = CountUse.CountUseAsProduct(getActivity(), rs.getString("id_order"));
                                 rs3.next();
-                                map = new HashMap<String, String>();
+                                map = new HashMap<>();
                                 map.put("id", rs.getString("id_order"));
                                 map.put("date", rs.getString("order_date"));
                                 map.put("id_formular", rs.getString("id_formular"));
@@ -88,7 +88,10 @@ public class MainFragment extends Fragment {
                                 map.put("name", convertFromUTF8(rs.getString("name")));
                                 map.put("choice", rs2.getString("NumberChoice"));
                                 map.put("use", rs3.getString("NumberUse"));
-                                MyArrList.add((HashMap<String, String>) map);
+                                if (!(rs2.getString("NumberChoice").equals(rs3.getString("NumberUse")))) {
+                                    MyArrList.add((HashMap<String, String>) map);
+                                }
+
                             } while (rs.next());
                         }
                         thread.sleep(200);
@@ -98,16 +101,16 @@ public class MainFragment extends Fragment {
                                 Toast.LENGTH_LONG).show();
                     } catch (InterruptedException e) {
                         e.printStackTrace();
-                    }catch (RuntimeException e){
+                    } catch (RuntimeException e) {
                         Toast.makeText(getActivity(), "" + e.toString(),
                                 Toast.LENGTH_LONG).show();
                     }
-                    if(Looper.myLooper() != null) { // check already Looper is associated or not.
+                    if (Looper.myLooper() != null) { // check already Looper is associated or not.
                         Looper.myLooper().quit();
                     }
 
                     handler.sendEmptyMessage(1);
-                    if(Looper.myLooper() != null) { // check already Looper is associated or not.
+                    if (Looper.myLooper() != null) { // check already Looper is associated or not.
                         Looper.loop();
                     }
 
@@ -232,7 +235,7 @@ public class MainFragment extends Fragment {
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 3)
+        if (requestCode == 3 || requestCode == 4)
             showList();
     }
 }

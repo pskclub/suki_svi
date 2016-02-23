@@ -23,6 +23,7 @@ import java.sql.Statement;
 
 import th.co.svi.sukuy.R;
 import th.co.svi.sukuy.manager.ConnectionDB;
+import th.co.svi.sukuy.manager.Member;
 
 public class LoginActivity extends AppCompatActivity {
     ConnectionDB connectionClass;
@@ -30,7 +31,6 @@ public class LoginActivity extends AppCompatActivity {
     TextView txtPassword;
     Button btnLogin;
     String username, userid;
-    SharedPreferences sp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,6 +64,7 @@ public class LoginActivity extends AppCompatActivity {
         if (txtUsername.getText().toString().equals("") || txtPassword.getText().toString().equals("")) {
             Toast.makeText(getApplicationContext(), "Please, input Username and Password.", Toast.LENGTH_SHORT).show();
         } else {
+
             connectionClass = new ConnectionDB();
             try {
                 Connection con = connectionClass.CONN();
@@ -78,13 +79,9 @@ public class LoginActivity extends AppCompatActivity {
                     if (rs != null && rs.next()) {
                         userid = rs.getString("id_employee");
                         username = rs.getString("name_employee");
+                        Member.getInstance().setIdEmployee(rs.getString("id_employee"));
+                        Member.getInstance().setNameEmployee(rs.getString("name_employee"));
                         Intent i = new Intent(LoginActivity.this, MainActivity.class);
-
-                        sp = getSharedPreferences("member", MODE_PRIVATE);
-                        sp.edit().putString("userid", userid);
-                        sp.edit().putString("username", username);
-                        sp.edit().commit();
-
                         startActivity(i);
                         finish();
                         connectionClass.CONN().close();

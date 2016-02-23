@@ -32,13 +32,33 @@
             android:id="@+id/txtNameChoice"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="#80000000"
+            android:gravity="center"
             android:maxLines="1"
             android:padding="2dp"
-            android:gravity="center"
-            android:background="#80000000"
             android:textColor="#FFFFFF" />
+        <TextView
+            android:id="@+id/txtNameSuccess"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_centerHorizontal="true"
+            android:background="#80000000"
+            android:visibility="gone"
+            android:text="เสร็จแล้ว"
+            android:gravity="center"
+            android:maxLines="1"
+            android:padding="2dp"
+            android:textColor="#FFFFFF" />
+        <CheckBox
+            android:id="@+id/checkSel"
+            android:focusable="false"
+            android:clickable="false"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content" />
     </RelativeLayout>
 
 
